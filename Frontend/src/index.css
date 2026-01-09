@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+    --color-cobalt-blue: #326FC5;
+    --color-cool-gray: #8889A5;
+    --color-azure-blue: #3582E9;
+    --color-lavender-mist: #F0EDEE;
+    --color-deep-magenta: #C805AA;
+    --color-chestnut-brown: #854332;
+    --color-licorice: #211311;
+}
+
+body {
+    background-color: var(--color-lavender-mist);
+    color: var(--color-licorice);
+    font-family: 'Inter', sans-serif;
+  }
+
+  @keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.60s ease-out forwards;
+}
