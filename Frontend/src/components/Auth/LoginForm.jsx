@@ -9,6 +9,7 @@ import { login } from '../../store/authSlice';
 import { loginUser } from '../../api/Auth/authApi';
 import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import AuthIllustrationImg from '../../assets/Images/AuthIllustrationImg.jpg';
 
 const LoginForm = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -54,58 +55,97 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="bg-lavender-mist flex justify-center items-center min-h-screen">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-                <h2 className="text-center text-3xl font-bold text-cobalt-blue mb-6">Login </h2>
+        <div className="min-h-screen bg-[var(--color-lavender-mist)] flex items-center justify-center px-4">
+            <div className="bg-white rounded-2xl shadow-lg w-full max-w-5xl overflow-hidden">
+                <div className="grid md:grid-cols-2 bg-gradient-to-br from-[var(--color-azure-blue)] to-[var(--color-lavender-mist)] h-[580px]">
 
-                <Formik
-                    initialValues={{
-                        username: '',
-                        password: '',
-                    }}
-                    validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
-                >
-                    {({ touched, errors }) => (
-                        <Form>
-                            {/* Username */}
-                            <InputField name="username" placeholder="Username" />
-                            {touched.username && errors.username && (
-                                <div className="text-red-500 text-sm">{errors.username}</div>
-                            )}
+                    {/* LEFT IMAGE SECTION */}
+                    <div className="hidden md:flex items-center justify-center py-8">
+                        <img
+                            src={AuthIllustrationImg}
+                            alt="Login Illustration"
+                            className="max-w-md rounded-2xl w-full h-full object-cover"
+                        />
+                    </div>
 
+                    {/* RIGHT FORM SECTION */}
+                    <div className="flex justify-center items-center py-8">
+                        <div className="w-full max-w-md">
 
-                            {/* Password */}
-                            <PasswordInputField name="password" placeholder="Password" />
-                            {touched.password && errors.password && (
-                                <div className="text-red-500 text-sm">{errors.password}</div>
-                            )}
+                            <h2 className="text-3xl font-bold text-deep-magenta mb-1">
+                                Login
+                            </h2>
+                            <p className="text-licorice mb-6">
+                                Access your Insureva account securely.
+                            </p>
 
-                            {/* Submit Button */}
-                            <button
-                                type="submit"
-                                className="w-full py-3 bg-deep-magenta text-white rounded-lg font-bold hover:bg-cobalt-blue focus:outline-none focus:ring-2 focus:ring-cobalt-blue"
+                            <Formik
+                                initialValues={{
+                                    username: '',
+                                    password: '',
+                                }}
+                                validationSchema={validationSchema}
+                                onSubmit={handleSubmit}
                             >
-                                {isLoading ?
-                                    <div className='w-full flex  justify-center'>
-                                        <Loader2 className='animate-spin' />
-                                    </div>
-                                    : <p>Login</p>
-                                }
-                            </button>
-                        </Form>
-                    )}
-                </Formik>
+                                {({ touched, errors }) => (
+                                    <Form>
 
-                <div className='w-full mt-2 flex items-center justify-center'>
-                    <p className="text-sm text-gray-600">
-                        Don't have an account?{' '}
-                        <Link to="/registration" className="text-cobalt-blue hover:underline">
-                            <span>Register</span>
-                        </Link>
-                    </p>
+                                        {/* Username */}
+                                        <InputField
+                                            name="username"
+                                            placeholder="Username"
+                                        />
+                                        {touched.username && errors.username && (
+                                            <div className="text-red-500 text-sm mb-2">
+                                                {errors.username}
+                                            </div>
+                                        )}
+
+                                        {/* Password */}
+                                        <PasswordInputField
+                                            name="password"
+                                            placeholder="Password"
+                                        />
+                                        {touched.password && errors.password && (
+                                            <div className="text-red-500 text-sm mb-4">
+                                                {errors.password}
+                                            </div>
+                                        )}
+
+                                        {/* Submit Button */}
+                                        <button
+                                            type="submit"
+                                            className="w-full py-3 bg-deep-magenta text-white rounded-lg font-bold hover:bg-cobalt-blue focus:outline-none focus:ring-2 focus:ring-cobalt-blue cursor-pointer transition ease-in-out duration-500"
+                                        >
+                                            {isLoading ? (
+                                                <div className="flex justify-center">
+                                                    <Loader2 className="animate-spin" />
+                                                </div>
+                                            ) : (
+                                                "Login"
+                                            )}
+                                        </button>
+                                    </Form>
+                                )}
+                            </Formik>
+
+                            {/* Register Link */}
+                            <div className="w-full mt-4 text-center">
+                                <p className="text-sm text-gray-600">
+                                    Don't have an account?{" "}
+                                    <Link
+                                        to="/registration"
+                                        className="text-deep-magenta font-semobold hover:underline"
+                                    >
+                                        Register
+                                    </Link>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
-
             </div>
         </div>
     );

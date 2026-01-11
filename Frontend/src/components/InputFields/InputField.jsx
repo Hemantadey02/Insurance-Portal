@@ -8,7 +8,7 @@ const InputField = ({ name, type = 'text', placeholder }) => {
                 name={name}
                 type={type}
                 placeholder={placeholder}
-                className="w-full p-3 border border-cool-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-cobalt-blue placeholder-cool-gray"
+                className="w-full p-3 border border-cool-gray rounded-lg focus:outline-none focus:ring focus:ring-deep-magenta placeholder-cool-gray"
             />
         </div>
     );

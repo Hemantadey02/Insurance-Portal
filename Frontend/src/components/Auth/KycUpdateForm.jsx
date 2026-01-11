@@ -7,6 +7,7 @@ import { updateUserDetails } from '../../api/Auth/authApi';
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { Loader2 } from 'lucide-react';
+import AuthIllustrationImg from '../../assets/Images/AuthIllustrationImg.jpg';
 
 const KycUpdateForm = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -61,73 +62,96 @@ const KycUpdateForm = () => {
     };
 
     return (
-        <div className="bg-lavender-mist flex justify-center items-center min-h-screen">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-                <h2 className="text-center text-3xl font-bold text-cobalt-blue mb-6">Fill your details</h2>
+        <div className="min-h-screen bg-[var(--color-lavender-mist)] flex items-center justify-center px-4">
+            <div className="bg-white rounded-2xl shadow-lg w-full max-w-5xl overflow-hidden">
+                <div className="grid md:grid-cols-2 bg-gradient-to-br from-[var(--color-lavender-mist)] to-[var(--color-azure-blue)] h-[580px]">
 
-                <Formik
-                    initialValues={{
-                        fullname: '',
-                        address: '',
-                        kycId: '',
-                        kycType: ''
-                    }}
-                    validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
-                >
-                    {({ touched, errors, setFieldValue }) => (
-                        <Form>
-                            {/* FullName */}
-                            <InputField name="fullname" placeholder="Full Name" />
-                            {touched.fullname && errors.fullname && (
-                                <div className="text-red-500 text-sm">{errors.fullname}</div>
-                            )}
+                    {/* LEFT FORM SECTION */}
+                    <div className="flex justify-center items-center py-8">
+                        <div className="w-full max-w-md">
+                            <h2 className="text-3xl font-bold text-deep-magenta mb-1">
+                                Complete KYC Verification
+                            </h2>
+                            <p className="text-licorice mb-6">
+                                Submit your details to proceed securely.
+                            </p>
 
-                            {/* Address */}
-                            <InputField name="address" placeholder="Address" />
-                            {touched.address && errors.address && (
-                                <div className="text-red-500 text-sm">{errors.address}</div>
-                            )}
-
-                            {/* KYC Type Dropdown */}
-                            <div className="mb-4">
-                                <select
-                                    id="kycType"
-                                    value={kycType}
-                                    onChange={(e) => {
-                                        setKycType(e.target.value);
-                                        setFieldValue('kycType', e.target.value);
-                                    }}
-                                    className="w-full p-3 border border-cool-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-cobalt-blue placeholder-cool-gray"
-                                >
-                                    <option disabled value="">Select KYC Type</option>
-                                    <option value="Aadhaar">Aadhaar Card</option>
-                                    <option value="PAN">PAN Card</option>
-                                    <option value="Passport">Passport</option>
-                                </select>
-                            </div>
-
-                            {/* KYC ID */}
-                            <InputField name="kycId" placeholder="KYC ID" />
-                            {touched.kycId && errors.kycId && (
-                                <div className="text-red-500 text-sm mb-2">{errors.kycId}</div>
-                            )}
-
-                            {/* Submit Button */}
-                            <button
-                                type="submit"
-                                className="w-full py-3 bg-deep-magenta text-white rounded-lg font-bold hover:bg-cobalt-blue focus:outline-none focus:ring-2 focus:ring-cobalt-blue"
+                            <Formik
+                                initialValues={{
+                                    fullname: '',
+                                    address: '',
+                                    kycId: '',
+                                    kycType: ''
+                                }}
+                                validationSchema={validationSchema}
+                                onSubmit={handleSubmit}
                             >
-                                {isLoading ?
-                                    <div className='w-full flex  justify-center'>
-                                        <Loader2 className='animate-spin' />
-                                    </div>
-                                    : <p>Submit</p>
-                                }
-                            </button>
-                        </Form>
-                    )}
-                </Formik>
+                                {({ touched, errors, setFieldValue }) => (
+                                    <Form>
+                                        {/* FullName */}
+                                        <InputField name="fullname" placeholder="Full Name" />
+                                        {touched.fullname && errors.fullname && (
+                                            <div className="text-red-500 text-sm">{errors.fullname}</div>
+                                        )}
+
+                                        {/* Address */}
+                                        <InputField name="address" placeholder="Address" />
+                                        {touched.address && errors.address && (
+                                            <div className="text-red-500 text-sm">{errors.address}</div>
+                                        )}
+
+                                        {/* KYC Type Dropdown */}
+                                        <div className="mb-4">
+                                            <select
+                                                id="kycType"
+                                                value={kycType}
+                                                onChange={(e) => {
+                                                    setKycType(e.target.value);
+                                                    setFieldValue('kycType', e.target.value);
+                                                }}
+                                                className="w-full p-3 border border-cool-gray rounded-lg focus:outline-none focus:ring-1 focus:ring-deep-magenta placeholder-cool-gray"
+                                            >
+                                                <option disabled value="">Select KYC Type</option>
+                                                <option value="Aadhaar">Aadhaar Card</option>
+                                                <option value="PAN">PAN Card</option>
+                                                <option value="Passport">Passport</option>
+                                            </select>
+                                        </div>
+
+                                        {/* KYC ID */}
+                                        <InputField name="kycId" placeholder="KYC ID" />
+                                        {touched.kycId && errors.kycId && (
+                                            <div className="text-red-500 text-sm mb-2">{errors.kycId}</div>
+                                        )}
+
+                                        {/* Submit Button */}
+                                        <button
+                                            type="submit"
+                                            className="w-full py-3 bg-deep-magenta text-white rounded-lg font-bold hover:bg-cobalt-blue focus:outline-none focus:ring-2 focus:ring-cobalt-blue"
+                                        >
+                                            {isLoading ?
+                                                <div className='w-full flex  justify-center'>
+                                                    <Loader2 className='animate-spin' />
+                                                </div>
+                                                : <p>Submit</p>
+                                            }
+                                        </button>
+                                    </Form>
+                                )}
+                            </Formik>
+
+                        </div>
+                    </div>
+
+                    {/* RIGHT IMAGE SECTION */}
+                    <div className="hidden md:flex items-center justify-center py-8">
+                        <img
+                            src={AuthIllustrationImg}
+                            alt="Login Illustration"
+                            className="max-w-md rounded-2xl w-full h-full object-cover"
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );
