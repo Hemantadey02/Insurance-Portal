@@ -5,11 +5,17 @@ import { login } from "../../store/authSlice";
 import { useEffect, useRef, useState } from "react";
 import { LogOut, User } from "lucide-react";
 import { logout } from '../../store/authSlice'  // Adjust the path as needed
+import toast from "react-hot-toast";
 
 function Navbar() {
     const authData = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [logOut, setLogOut] = useState(false);
+
+    const onClose = () => {
+        setLogOut(false);
+    };
 
     const navRef = useRef(null);
     const [isSticky, setIsSticky] = useState(false);
@@ -47,6 +53,7 @@ function Navbar() {
     const handleLogout = () => {
         dispatch(logout())
         navigate('/login')  // Redirect to login page after logout
+        toast.success("Logged out successfully");
     }
 
     return (
@@ -63,7 +70,7 @@ function Navbar() {
             >
                 <div className="max-w-[94%] mx-auto px-2 py-3 flex justify-between items-center">
                     <div className="text-3xl font-bold text-cobalt-blue">
-                        <Link to="/">Insurance</Link>
+                        <Link to="/">Insureva</Link>
                     </div>
 
                     {authData.status === "active" ? (
@@ -99,7 +106,7 @@ function Navbar() {
               shadow-[0_10px_30px_rgba(0,0,0,0.04)]
               border border-red-200 transition">
                                 <button
-                                    onClick={handleLogout}
+                                    onClick={() => setLogOut(true)}
                                     className="w-full text-left text-red-500 font-semibold p-2 flex gap-2 items-center cursor-pointer"
                                 >
                                     <LogOut />
@@ -111,13 +118,13 @@ function Navbar() {
                         <div className="flex items-center space-x-6 h-[58px]">
                             <Link
                                 to="/registration"
-                                className="text-cool-gray hover:text-cobalt-blue transition"
+                                className="text-white rounded-xl border-2 border-deep-magenta bg-deep-magenta px-4 py-2  hover:text-deep-magenta hover:bg-white transition"
                             >
                                 Register
                             </Link>
                             <Link
                                 to="/login"
-                                className="text-cool-gray hover:text-cobalt-blue transition"
+                                className="border-2 border-lavender-mist hover:border-cool-gray px-4 py-2 rounded-xl hover:text-deep-magenta transition"
                             >
                                 Login
                             </Link>
@@ -125,6 +132,35 @@ function Navbar() {
                     )}
                 </div>
             </nav>
+            {logOut && <div className="fixed inset-0 flex justify-center items-center z-50">
+                <div
+                    onClick={onClose}
+                    className="absolute inset-0 bg-black opacity-50 backdrop-blur-sm"
+                ></div>
+                <div className="relative bg-white p-6 rounded-lg shadow-lg min-w-[300px] z-10">
+                    <h3 className="text-lg font-semibold">Confirm Logout</h3>
+                    <p className="mt-2 text-sm">
+                        Are you sure you want to logout?
+                    </p>
+                    <div className="mt-4 flex justify-between">
+                        <button
+                            onClick={onClose}
+                            className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 cursor-pointer"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={() => {
+                                handleLogout();
+                                onClose();
+                            }}
+                            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 cursor-pointer"
+                        >
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>}
         </>
     );
 }
