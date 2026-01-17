@@ -11,7 +11,7 @@ function Footer() {
       {/* Brand */}
       <div>
         <h3 className="text-3xl font-semibold text-cobalt-blue">
-          Insurance
+          Insureva
         </h3>
         <p className="mt-2 text-sm text-cool-gray max-w-sm leading-relaxed">
           Manage your insurance policies, claims, and requests securely from one trusted platform.
@@ -69,7 +69,7 @@ function Footer() {
     <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-[var(--color-lavender-mist)]">
 
       <span>
-        © {new Date().getFullYear()} Insurance. All rights reserved.
+        © {new Date().getFullYear()} Insureva. All rights reserved.
       </span>
 
       <div className="flex gap-6">

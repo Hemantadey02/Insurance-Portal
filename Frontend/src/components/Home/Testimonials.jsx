@@ -22,7 +22,7 @@ function Testimonials() {
 
         {/* Heading */}
         <h2 className="text-3xl text-[var(--color-cobalt-blue)] font-semibold mb-16">
-          What our users say about us
+          What Our Users Say About Us
         </h2>
 
         {/* Cards */}

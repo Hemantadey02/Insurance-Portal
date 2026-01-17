@@ -70,7 +70,7 @@ function Navbar() {
             >
                 <div className="max-w-[94%] mx-auto px-2 py-3 flex justify-between items-center">
                     <div className="text-3xl font-bold text-cobalt-blue">
-                        <Link to="/">Insureva</Link>
+                        <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Insureva</Link>
                     </div>
 
                     {authData.status === "active" ? (
@@ -118,12 +118,14 @@ function Navbar() {
                         <div className="flex items-center space-x-6 h-[58px]">
                             <Link
                                 to="/registration"
+                                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                                 className="text-white rounded-xl border-2 border-deep-magenta bg-deep-magenta px-4 py-2  hover:text-deep-magenta hover:bg-white transition"
                             >
                                 Register
                             </Link>
                             <Link
                                 to="/login"
+                                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                                 className="border-2 border-lavender-mist hover:border-cool-gray px-4 py-2 rounded-xl hover:text-deep-magenta transition"
                             >
                                 Login
