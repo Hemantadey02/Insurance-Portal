@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import RequestCard from "../components/Requests/RequestCard";
 import AddNewRequest from "../components/Requests/AddNewRequest";
 import { Plus } from "lucide-react";
@@ -10,11 +10,20 @@ const RequestsPage = () => {
   const [open, setOpen] = useState(false);
   const [userId, setUserId] = useState(null);
   const [requests, setRequests] = useState([]);
-  const handleOpen = () => setOpen(!open);
+
+  const handleOpen = () => setOpen((prev) => !prev);
 
   // const dispatch = useDispatch();
   const userDetails = useSelector((state) => state.auth.userDetails);
 
+  // Fetch requests (reusable)
+  const fetchRequests = useCallback(async (uid) => {
+    if (!uid) return;
+    const result = await getUserRequests(uid);
+    setRequests(result || []);
+  }, []);
+
+  // Get userId 
   useEffect(() => {
     if (!userDetails) {
       const fetchUserDetails = async () => {
@@ -29,15 +38,10 @@ const RequestsPage = () => {
     }
   }, [userDetails]);
 
+  // Fetch requests when userId changes
   useEffect(() => {
-    if (userId) {
-      const getUserRequestsData = async () => {
-        const result = await getUserRequests(userId); // Fetch requests using userId
-        setRequests(result);
-      };
-      getUserRequestsData();
-    }
-  }, [userId]);
+    fetchRequests(userId);
+  }, [userId, fetchRequests]);
 
   return (
     <div className="container flex justify-center min-h-screen p-4">
@@ -75,7 +79,7 @@ const RequestsPage = () => {
           ></div>
 
           <div className="relative bg-white p-8 rounded-lg shadow-lg min-w-[300px] z-10">
-            <AddNewRequest handleOpen={handleOpen} userId={userId} />
+            <AddNewRequest handleOpen={handleOpen} userId={userId} onSuccess={() => fetchRequests(userId)} />
           </div>
         </div>
       )}

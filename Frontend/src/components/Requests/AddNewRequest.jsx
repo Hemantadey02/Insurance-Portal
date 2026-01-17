@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { createUserRequest } from "../../api/Request/requestsApi";
 import toast from "react-hot-toast";
 
-const AddNewRequest = ({ handleOpen, userId }) => {
+const AddNewRequest = ({ handleOpen, userId, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -24,6 +24,7 @@ const AddNewRequest = ({ handleOpen, userId }) => {
         const res = await createUserRequest(values);
         console.log("Form submitted : ", res);
         toast.success("Request successfully created!");
+        onSuccess(); 
         handleOpen(); // Close the modal on success
       } catch (error) {
         toast.error(
