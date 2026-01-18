@@ -28,7 +28,7 @@ const LoginForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const admins = ["admin098", "admin"]
+    const admins = ["admin098", "admin01"]
 
     // Form submission handler
     const handleSubmit = async (values) => {
