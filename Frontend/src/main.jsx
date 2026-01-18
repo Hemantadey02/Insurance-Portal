@@ -24,7 +24,7 @@ import { Toaster } from 'react-hot-toast'
 import UserClaimPage from './Pages/UserClaimPage.jsx'
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AdminDashboard from "./Pages/AdminDashboard.jsx";
-
+import AccessDenied from "./Pages/AccessDenied.jsx";
 
 
 const routing = (
@@ -32,16 +32,17 @@ const routing = (
     <Navbar />
     <Toaster position="top-center" reverseOrder={false} />
     <Routes>
+      {/* Public routes */}
       <Route path="/" element={<HomePage />} />
       <Route path="/registration" element={<RegistrationPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/kyc-update" element={<KycUpdatePage />} />
 
-      {/* Protected /dashboard route and nested routes */}
+      {/* Protected user routes */}
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute required="user">
             <UserDashboard />
           </ProtectedRoute>
         }
@@ -55,19 +56,21 @@ const routing = (
         <Route path="claims" element={<UserClaimPage />} />
       </Route>
 
-      {/* Admin routes */}
+      {/* Protected Admin routes */}
       <Route
         path="/admin"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute required="admin">
             <AdminDashboard />
           </ProtectedRoute>
         }
       >
         <Route path="requests" element={<AdminRequestsPage />} />
         <Route path="messages" element={<AdminMessagesPage />} />
+        <Route path="profile" element={<UserProfilePage />} />
       </Route>
 
+      <Route path="/access-denied" element={<AccessDenied />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
     <Footer />

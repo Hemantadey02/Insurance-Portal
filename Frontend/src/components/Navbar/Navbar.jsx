@@ -77,7 +77,13 @@ function Navbar() {
                         <div className="flex gap-8">
                             {/* Profile Button */}
                             <div
-                                onClick={() => navigate("/dashboard/profile")}
+                                onClick={() => {
+                                    if (authData.user?.username.includes("admin")) {
+                                        navigate("/admin/profile")
+                                    } else {
+                                        navigate("/dashboard/profile")
+                                    }
+                                }}
                                 className="cursor-pointer inline-flex items-center gap-4 px-4 py-2 rounded-2xl 
               bg-gradient-to-br from-[#F6F5FF] to-[#ECEBFF]
               shadow-[0_10px_30px_rgba(0,0,0,0.04)]

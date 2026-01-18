@@ -46,12 +46,13 @@ const AdminRequestCard = ({ request, onUpdate }) => {
       <div className="mb-4">
         <strong>Status: </strong>
         <span
-          className={`text-${request.status === "Completed"
-            ? "green"
-            : request.status === "In Progress"
-              ? "yellow"
-              : `[cobalt-blue]`
-            }-500`}
+          className={
+            request.status === "Completed"
+              ? "text-green-500"
+              : request.status === "In Progress"
+                ? "text-yellow-500"
+                : "text-[var(--color-cobalt-blue)]"
+          }
         >
           {request.status}
         </span>
@@ -70,7 +71,6 @@ const AdminRequestCard = ({ request, onUpdate }) => {
         >
           Edit Status
         </button>
-
         <button
           onClick={handleTrackStatus}
           className="bg-white font-semibold text-black cursor-pointer px-4 py-2 border-2 border-gray-400 rounded-md hover:bg-gray-400 hover:text-white transition-all ease-in-out duration-300"
