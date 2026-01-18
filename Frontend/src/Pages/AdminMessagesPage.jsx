@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import AdminMessageCard from "../components/Messages/Admin/AdminMessageCard";
 import { getAllMessages } from "../api/Message/messagesApi";
@@ -7,9 +7,10 @@ import { getAllUsers } from "../api/Auth/authApi";
 
 const AdminMessagesPage = () => {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(!open);
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
+
+  const handleOpen = () => setOpen((prev) => !prev);
 
   useEffect(() => {
     const getAllUsersData = async () => {
@@ -24,17 +25,18 @@ const AdminMessagesPage = () => {
     getAllUsersData();
   }, []);
 
-  useEffect(() => {
-    const getAllMessagesData = async () => {
-      try {
-        const res = await getAllMessages();
-        setMessages(res);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getAllMessagesData();
+  const fetchMessages = useCallback(async () => {
+    try {
+      const res = await getAllMessages();
+      setMessages(res);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -60,7 +62,10 @@ const AdminMessagesPage = () => {
             </div>
           ) : (
             messages.map((message) => (
-              <AdminMessageCard key={message.messageId} message={message} />
+              <AdminMessageCard
+                key={message.messageId}
+                message={message}
+              />
             ))
           )}
         </div>
@@ -74,7 +79,11 @@ const AdminMessagesPage = () => {
           ></div>
 
           <div className="relative bg-white p-8 rounded-lg shadow-lg min-w-[300px] z-10">
-            <AdminCreateMessage handleOpen={handleOpen} users={users} />
+            <AdminCreateMessage
+              handleOpen={handleOpen}
+              users={users}
+              onMessageCreated={fetchMessages}
+            />
           </div>
         </div>
       )}

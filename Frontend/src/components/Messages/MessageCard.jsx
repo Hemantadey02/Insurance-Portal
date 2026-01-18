@@ -37,20 +37,16 @@ const Message = ({ message }) => {
         <div className="text-xs text-gray-500 mt-1">{sentAtRelativeTime}</div>
       </div>
 
-      <div
-        onClick={toggleExpand}
-        className="absolute bottom-2 right-2 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-      >
-        {!isExpanded ? (
-          <button className="w-8 h-8 px-1 cursor-pointer border rounded-full bg-deep-magenta text-white">
-            <ArrowDown />
-          </button>
-        ) : (
-          <button className="w-8 h-8 px-1 cursor-pointer border rounded-full bg-deep-magenta text-white">
-            <ArrowUp />
-          </button>
-        )}
-      </div>
+      {message.content.length > 156 && (
+        <button
+          onClick={toggleExpand}
+          className="absolute bottom-2 right-2 w-8 h-8 flex items-center justify-center
+                           rounded-full bg-deep-magenta text-white transition-transform duration-300
+                           hover:scale-105 cursor-pointer"
+        >
+          {isExpanded ? <ArrowUp /> : <ArrowDown />}
+        </button>
+      )}
     </div>
   );
 };

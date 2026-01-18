@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { createMessage } from "../../../api/Message/messagesApi";
 import toast from "react-hot-toast";
 
-const AdminCreateMessage = ({ handleOpen, users }) => {
+const AdminCreateMessage = ({ handleOpen, users, onMessageCreated }) => {
   const [loading, setLoading] = useState(false);
 
   const userList = users
@@ -19,12 +19,14 @@ const AdminCreateMessage = ({ handleOpen, users }) => {
       content: "",
       sentAt: new Date().toISOString(),
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values, {resetForm}) => {
       setLoading(true);
       try {
-        const res = await createMessage(values);
+        await createMessage(values);
         toast.success("Message created successfully.");
         // console.log("Form Data : ", values);
+        onMessageCreated();
+        resetForm();
         handleOpen();
       } catch (error) {
         toast.error(
@@ -87,7 +89,9 @@ const AdminCreateMessage = ({ handleOpen, users }) => {
           >
             {loading ? "Submitting..." : "Submit"}
           </button>
+
           <button
+            type="button"
             onClick={handleOpen}
             className="bg-white font-semibold text-black px-4 cursor-pointer py-2 border-2 border-gray-400 rounded-md hover:bg-gray-400 transition-all ease-in-out duration-300"
           >

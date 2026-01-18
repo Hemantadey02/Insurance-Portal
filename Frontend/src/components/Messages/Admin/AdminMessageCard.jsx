@@ -26,7 +26,7 @@ const AdminMessageCard = ({ message }) => {
           setUsers([...users, newUser]);
         });
         console.log(users);
-      } catch (error) {}
+      } catch (error) { }
     };
     getAllUsersData();
   }, [users]);
@@ -36,13 +36,13 @@ const AdminMessageCard = ({ message }) => {
   return (
     <div className="flex items-center space-x-4 p-4 border-b rounded-xl border-gray-200 bg-gray-50 transition-all relative">
       {/* Avatar */}
-      <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+      <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
         <MessageSquareText />
       </div>
 
       <div className="flex-1">
         {!isExpanded ? (
-          <div className="text-sm font-semibold text-gray-900">
+          <div className="text-sm font-semibold text-gray-900 overflow-hidden transition-all duration-700 ease-in-out">
             {message.content.length > 156
               ? message.content.slice(0, 153) + "..."
               : message.content}
@@ -59,20 +59,16 @@ const AdminMessageCard = ({ message }) => {
         </div>
       </div>
 
-      <div
-        onClick={toggleExpand}
-        className="absolute bottom-2 right-2 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-      >
-        {!isExpanded ? (
-          <button className="w-8 h-8 px-1 cursor-pointer border rounded-full bg-deep-magenta text-white">
-            <ArrowDown />
-          </button>
-        ) : (
-          <button className="w-8 h-8 px-1 cursor-pointer border rounded-full bg-deep-magenta text-white">
-            <ArrowUp />
-          </button>
-        )}
-      </div>
+      {message.content.length > 156 && (
+        <button
+          onClick={toggleExpand}
+          className="absolute bottom-2 right-2 w-8 h-8 flex items-center justify-center
+                     rounded-full bg-deep-magenta text-white transition-transform duration-300
+                     hover:scale-105 cursor-pointer"
+        >
+          {isExpanded ? <ArrowUp /> : <ArrowDown />}
+        </button>
+      )}
     </div>
   );
 };
