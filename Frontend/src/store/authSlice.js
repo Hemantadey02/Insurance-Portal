@@ -15,12 +15,14 @@ const authSlice = createSlice({
         login: (state, action) => {
             state.status = 'active';
             state.user = action.payload;
+            state.error = null;
         },
 
         // Register Reducer
         register: (state, action) => {
             state.status = 'active';
             state.user = action.payload;
+            state.error = null;
         },
 
         // Logout Reducer

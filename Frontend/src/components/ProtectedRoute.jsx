@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { getUserDetails } from "../api/Auth/authApi";
+import Loader from "./Loader";
 
 const ProtectedRoute = ({ children, required }) => {
     const token = sessionStorage.getItem("auth_token");
@@ -24,7 +25,7 @@ const ProtectedRoute = ({ children, required }) => {
             .finally(() => setLoading(false));
     }, [token]);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Loader fullHeight={true} />;
 
     // Not logged in
     if (!token || !username) {

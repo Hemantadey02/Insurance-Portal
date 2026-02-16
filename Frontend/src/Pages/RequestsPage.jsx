@@ -1,46 +1,47 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import RequestCard from "../components/Requests/RequestCard";
 import AddNewRequest from "../components/Requests/AddNewRequest";
 import { Plus } from "lucide-react";
-import { getUserDetails } from "../api/Auth/authApi";
 import { getUserRequests } from "../api/Request/requestsApi";
 import { useSelector } from "react-redux";
+import Loader from "../components/Loader";
 
 const RequestsPage = () => {
   const [open, setOpen] = useState(false);
   const [userId, setUserId] = useState(null);
   const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleOpen = () => setOpen((prev) => !prev);
+  const authData = useSelector((state) => state.auth);
 
-  // const dispatch = useDispatch();
-  const userDetails = useSelector((state) => state.auth.userDetails);
+  useEffect(() => {
+    if (authData?.user?.userId) {
+      setUserId(authData.user.userId);
+    }
+  }, [authData]);
 
   // Fetch requests (reusable)
   const fetchRequests = useCallback(async (uid) => {
-    if (!uid) return;
-    const result = await getUserRequests(uid);
-    setRequests(result || []);
-  }, []);
-
-  // Get userId 
-  useEffect(() => {
-    if (!userDetails) {
-      const fetchUserDetails = async () => {
-        const result = await getUserDetails();
-        if (result && result.userId) {
-          setUserId(result.userId); // Set userId from API response
-        }
-      };
-      fetchUserDetails();
-    } else {
-      setUserId(userDetails.userId); // Get userId from Redux store
+    try {
+      setError(null);
+      const result = await getUserRequests(uid); // Fetch requests using userId
+      setRequests(result || []);
+    } catch (err) {
+      setError("Failed to load requests. Please try again.");
+      setRequests([]);
+    } finally {
+      setLoading(false);
     }
-  }, [userDetails]);
+  }, []);
 
   // Fetch requests when userId changes
   useEffect(() => {
-    fetchRequests(userId);
+    if (userId) {
+      setLoading(true);
+      fetchRequests(userId);
+    }
   }, [userId, fetchRequests]);
 
   return (
@@ -58,17 +59,24 @@ const RequestsPage = () => {
             Add New Request
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {requests.length === 0 ? (
-            <div className="flex flex-col">
-              <p>No requests found</p>
-            </div>
-          ) : (
-            requests.map((request) => (
-              <RequestCard key={request.requestId} request={request} />
-            ))
-          )}
-        </div>
+
+        {loading ? (
+          <div className="col-span-full">
+            <Loader />
+          </div>
+        ) : error ? (
+          <p className="text-red-600">{error}</p>
+        ) : requests?.length === 0 ? (
+          <p className="text-gray-600">You have not made any requests yet.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {requests?.map((request) => (
+              <RequestCard key={request.requestId}
+                request={request}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {open && (

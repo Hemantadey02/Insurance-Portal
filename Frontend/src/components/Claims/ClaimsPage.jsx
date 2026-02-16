@@ -1,70 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ClaimCard from './ClaimCard';
 import { useSelector } from 'react-redux';
 import { getAllClaims } from '../../api/Claims/claimsApi';
-import { getUserDetails } from '../../api/Auth/authApi';
+import Loader from '../Loader';
 
 const ClaimsPage = () => {
     const [userId, setUserId] = useState(null);
     const [claimsData, setClaimsData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState(null);
-
-    // const authData = useSelector((state) => state.auth);
-    // const userId = authData.user?.userId;
-
-    // useEffect(() => {
-    //     if (userId) {
-    //         const fetchAllClaims = async () => {
-    //             try {
-    //                 setLoading(true);
-    //                 const claims = await getAllClaims(userId);
-    //                 setClaimsData(claims);
-    //             } catch (err) {
-    //                 setError('Failed to fetch claims');
-    //             } finally {
-    //                 setLoading(false);
-    //             }
-    //         };
-
-    //         fetchAllClaims();
-    //     }
-    // }, [userId]);
-
-    // if (loading) {
-    //     return <div>Loading...</div>;
-    // }
-
-    // if (error) {
-    //     return <div>{error}</div>;
-    // }
-
-    const userDetails = useSelector((state) => state.auth.userDetails);
+    const authData = useSelector((state) => state.auth);
 
     useEffect(() => {
-        if (!userDetails) {
-            const fetchUserDetails = async () => {
-                const result = await getUserDetails();
-                if (result && result.userId) {
-                    setUserId(result.userId); // Set userId from API response
-                }
-            };
-            fetchUserDetails();
-        } else {
-            setUserId(userDetails.userId); // Get userId from Redux store
+        if (authData?.user?.userId) {
+            setUserId(authData.user.userId);
         }
-    }, [userDetails]);
+    }, [authData]);
 
+    // Fetch claims data (reusable)
+    const fetchUserClaimsData = useCallback(async (uid) => {
+        try {
+            setError(null);
+            const result = await getAllClaims(uid); // Fetch claims using userId
+            setClaimsData(result || []);
+        } catch (err) {
+            setError('Failed to load claims. Please try again.');
+            setClaimsData([]);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    // Fetch claims when userId changes
     useEffect(() => {
         if (userId) {
-            const getUserClaimsData = async () => {
-                const result = await getAllClaims(userId); // Fetch requests using userId
-                setClaimsData(result);
-            };
-            getUserClaimsData();
+            setLoading(true);
+            fetchUserClaimsData(userId);
         }
-    }, [userId]);
+    }, [userId, fetchUserClaimsData]);
 
     return (
         <div className="container mx-auto mb-6">
@@ -74,17 +48,23 @@ const ClaimsPage = () => {
                 </h1>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {claimsData.length === 0 ? (
-                    <div className="flex flex-col">
-                        <p>No claims found</p>
-                    </div>
-                ) : (
-                    claimsData?.map(claim => (
-                        <ClaimCard key={claim.claimId} claim={claim} />
-                    ))
-                )}
-            </div>
+            {loading ? (
+                <div className="col-span-full">
+                    <Loader />
+                </div>
+            ) : error ? (
+                <p className="text-red-600">{error}</p>
+            ) : claimsData?.length === 0 ? (
+                <p className="text-gray-600">You have not filed any claims yet.</p>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {claimsData?.map((claim) => (
+                        <ClaimCard key={claim.claimId}
+                            claim={claim}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
