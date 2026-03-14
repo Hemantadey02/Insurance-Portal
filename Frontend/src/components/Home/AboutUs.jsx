@@ -1,4 +1,4 @@
-import AboutUsImg from "../../assets/images/AboutUsImg.jpg";
+import AboutUsImg from "../../assets/Images/AboutUsImg.jpg";
 
 function AboutUs() {
   return (
